@@ -103,7 +103,8 @@ def main():
         "claude-3-5-sonnet": getattr(llm_models, "CLAUDE_3_5_SONNET", "claude-3-5-sonnet"),
         "gemini-1.5-flash": getattr(llm_models, "GEMINI_1_5_FLASH", "gemini-1.5-flash"),
         "llama-3.1-70b": getattr(llm_models, "LLAMA_3_1_405B", "llama-3.1-70b"),
-        "llama-3.1-8b": getattr(llm_models, "LLAMA_3_3_70B", "llama-3.1-8b"),
+        "llama-3.1-70b": getattr(llm_models, "LLAMA_3_1_70B", "llama-3.1-70b"),
+        "llama-3.1-8b": getattr(llm_models, "LLAMA_3_1_8B", "llama-3.1-8b"),
     }
 
     def create_spec(rubric_text: str, model_key: str, min_s: float, max_s: float):
@@ -140,7 +141,8 @@ def main():
                 client.judges.create_judge(judge_id=judge_id, judge_spec=spec_obj, description=f"{pconf['description']} for {jr.JUDGE_DESCRIPTIONS.get(rkey, rkey)}")
                 print(f"Created {judge_id}")
                 created.append(judge_id)
-            except Exception:
+            except Exception as e:
+                print(f"Create failed for {judge_id}: {e}")
                 # Try update if exists
                 try:
                     client.judges.update_judge(judge_id=judge_id, judge_spec=spec_obj)

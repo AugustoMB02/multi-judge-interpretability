@@ -59,8 +59,8 @@ def create_all_judges(cfg: dict) -> list[str]:
         "gpt-4o-mini": getattr(llm_models, "GPT_4O_MINI", "gpt-4o-mini"),
         "claude-3-5-sonnet": getattr(llm_models, "CLAUDE_3_5_SONNET", "claude-3-5-sonnet"),
         "gemini-1.5-flash": getattr(llm_models, "GEMINI_1_5_FLASH", "gemini-1.5-flash"),
-        "llama-3.1-70b": getattr(llm_models, "LLAMA_3_1_405B", "llama-3.1-70b"),
-        "llama-3.1-8b": getattr(llm_models, "LLAMA_3_3_70B", "llama-3.1-8b"),
+        "llama-3.1-70b": getattr(llm_models, "LLAMA_3_1_70B", "llama-3.1-70b"),
+        "llama-3.1-8b": getattr(llm_models, "LLAMA_3_1_8B", "llama-3.1-8b"),
     }
 
     def mk_spec(rubric_text: str, model_key: str):
@@ -84,7 +84,8 @@ def create_all_judges(cfg: dict) -> list[str]:
                 try:
                     client.judges.create_judge(judge_id=judge_id, judge_spec=spec, description=desc)
                     logger.info(f"Created {judge_id}")
-                except Exception:
+                except Exception as e:
+                    logger.warning(f"Create failed for {judge_id}: {e}", exc_info=True)
                     client.judges.update_judge(judge_id=judge_id, judge_spec=spec)
                     logger.info(f"Updated {judge_id}")
                 created.append(judge_id)
