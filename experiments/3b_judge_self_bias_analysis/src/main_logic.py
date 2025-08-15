@@ -11,7 +11,8 @@ import sys
 from pathlib import Path
 from typing import Dict, Optional
 
-ROOT = Path(__file__).resolve().parents[2]
+# Resolve repository root (three levels up from this file: src -> experiment dir -> experiments -> repo root)
+ROOT = Path(__file__).resolve().parents[3]
 sys.path.append(str(ROOT))
 
 
